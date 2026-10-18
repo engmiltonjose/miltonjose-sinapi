@@ -1,0 +1,34 @@
+Abrindo planilha (sem read_only — aguarde)...
+Planilha carregada.
+Lendo CSD...
+  CSD: 10360 composicoes
+  Exemplo: 104658 → PISO PODOTÁTIL DE ALERTA OU DIRECIONAL, DE CONCRETO, ASSENTA
+Lendo CCD...
+Lendo CSE...
+sinapi-composicoes.json: 10360 composicoes, 11683 KB
+
+Lendo Analitico...
+  Linhas com itens: 55011
+sinapi-analitico.json: 10341 composicoes, 10499 KB
+  Composicoes com analitico: 10341/10360
+
+Lendo ISD...
+  ISD: 4559 insumos
+Lendo ICD...
+Lendo ISE...
+sinapi-insumos.json: 4559 insumos, 4612 KB
+
+=== VALIDACAO ===
+composicoes :  10360  | 11683 KB
+analitico   :  10341  | 10499 KB
+insumos     :   4559  | 4612 KB
+TOTAL                 | 26794 KB
+  87262: composicoes=True, analitico=True
+    SP/SD=126.01  grupo=Revestimentos Cerâmicos Internos
+    Itens: 5  | Ex: {'tipo': 'COMPOSIÇÃO', 'codigo': '88316', 'descricao': 'SERVENTE COM ENCARGOS COMPLEMENTARES', 'unidade': 'H', 'coef': 0.2064, 'situacao': 'COM CUSTO'}
+  74209: composicoes=False, analitico=False
+  93358: composicoes=True, analitico=True
+    SP/SD=123.22  grupo=Escavação de Valas
+    Itens: 1  | Ex: {'tipo': 'COMPOSIÇÃO', 'codigo': '88316', 'descricao': 'SERVENTE COM ENCARGOS COMPLEMENTARES', 'unidade': 'H', 'coef': 3.955767, 'situacao': 'COM CUSTO'}
+
+Concluido.

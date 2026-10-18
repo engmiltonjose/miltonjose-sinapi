@@ -1,0 +1,101 @@
+{
+  "2026-01": {
+    "pacote": "SINAPI-2026-01-formato-xlsx_Retificacao01.zip",
+    "retificacao": 1,
+    "processado_em": "2026-10-18T15:51:17+00:00",
+    "registros": {
+      "composicoes": 10255,
+      "analitico": 10236,
+      "insumos": 4555
+    },
+    "validacao_passou": false
+  },
+  "2026-02": {
+    "pacote": "SINAPI-2026-02-formato-xlsx_Retificacao01.zip",
+    "retificacao": 1,
+    "processado_em": "2026-10-18T15:52:06+00:00",
+    "registros": {
+      "composicoes": 10360,
+      "analitico": 10341,
+      "insumos": 4559
+    },
+    "validacao_passou": false
+  },
+  "2026-03": {
+    "pacote": "SINAPI-2026-03-formato-xlsx.zip",
+    "retificacao": 0,
+    "processado_em": "2026-10-18T15:52:52+00:00",
+    "registros": {
+      "composicoes": 10284,
+      "analitico": 10265,
+      "insumos": 4559
+    },
+    "validacao_passou": false
+  },
+  "2026-04": {
+    "pacote": "SINAPI-2026-04-formato-xlsx.zip",
+    "retificacao": 0,
+    "processado_em": "2026-10-18T15:53:38+00:00",
+    "registros": {
+      "composicoes": 10378,
+      "analitico": 10359,
+      "insumos": 4559
+    },
+    "validacao_passou": false
+  },
+  "2026-05": {
+    "pacote": "SINAPI-2026-05-formato-xlsx.zip",
+    "retificacao": 0,
+    "processado_em": "2026-10-18T15:54:24+00:00",
+    "registros": {
+      "composicoes": 10413,
+      "analitico": 10394,
+      "insumos": 4580
+    },
+    "validacao_passou": false
+  },
+  "2026-06": {
+    "pacote": "SINAPI-2026-06-formato-xlsx.zip",
+    "retificacao": 0,
+    "processado_em": "2026-10-18T15:55:11+00:00",
+    "registros": {
+      "composicoes": 10454,
+      "analitico": 10435,
+      "insumos": 4580
+    },
+    "validacao_passou": false
+  },
+  "2026-07": {
+    "pacote": "SINAPI-2026-07-formato-xlsx.zip",
+    "retificacao": 0,
+    "processado_em": "2026-10-18T15:55:57+00:00",
+    "registros": {
+      "composicoes": 10544,
+      "analitico": 10525,
+      "insumos": 4580
+    },
+    "validacao_passou": false
+  },
+  "2026-08": {
+    "pacote": "SINAPI-2026-08-formato-xlsx.zip",
+    "retificacao": 0,
+    "processado_em": "2026-10-18T15:56:43+00:00",
+    "registros": {
+      "composicoes": 10547,
+      "analitico": 10528,
+      "insumos": 4580
+    },
+    "validacao_passou": false
+  },
+  "2026-09": {
+    "pacote": "SINAPI-2026-09-formato-xlsx.zip",
+    "retificacao": 0,
+    "processado_em": "2026-10-18T15:57:13+00:00",
+    "registros": {
+      "composicoes": 10599,
+      "analitico": 10580,
+      "insumos": 4582
+    },
+    "validacao_passou": false
+  }
+}
