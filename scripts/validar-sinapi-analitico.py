@@ -90,12 +90,13 @@ def validar_analitico(arquivo_json, arquivo_composicoes_json=None):
             if tipo == 'INSUMO':
                 tem_insumo = True
                 stats['total_insumos'] += 1
-            elif tipo == 'COMPOSIO':
+            elif tipo.startswith('COMPOSI'):  # 'COMPOSIÇÃO' (com ou sem acento)
                 tem_composicao = True
                 stats['total_composicoes_ref'] += 1
 
-        # Aviso: composio sem insumos
-        if not tem_insumo:
+        # Aviso: composição sem insumos E sem composições auxiliares (vazia de fato).
+        # Composições formadas só por auxiliares (ex.: ARMADOR COM ENCARGOS) são normais no SINAPI.
+        if not tem_insumo and not tem_composicao:
             stats['composicoes_sem_insumos'].append(cod_comp)
             if composicoes and cod_comp in composicoes:
                 desc = composicoes[cod_comp].get('descricao', '')

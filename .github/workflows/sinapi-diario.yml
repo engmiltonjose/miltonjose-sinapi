@@ -50,4 +50,13 @@ jobs:
         if: always() && hashFiles('saida/novidades.md') != ''
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh issue create --title "SINAPI atualizado — $(date -u +%Y-%m-%d)" --body-file saida/novidades.md
+        run: gh issue create --title "$(cat saida/titulo.txt)" --body-file saida/novidades.md
+
+      - name: Avisar falha inesperada
+        if: failure() && hashFiles('saida/novidades.md') == ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create --title "❌ Robô do SINAPI falhou antes de gerar o relatório" --body "O robô parou antes de conseguir montar o relatório (erro na instalação ou no próprio GitHub).
+
+          **O que fazer:** nada por enquanto — ele tenta de novo amanhã. Se repetir, peça ao Claude para olhar o log: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"

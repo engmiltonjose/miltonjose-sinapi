@@ -8,7 +8,7 @@
       "analitico": 10236,
       "insumos": 4555
     },
-    "validacao_passou": false
+    "validacao_passou": true
   },
   "2026-02": {
     "pacote": "SINAPI-2026-02-formato-xlsx_Retificacao01.zip",
@@ -19,7 +19,7 @@
       "analitico": 10341,
       "insumos": 4559
     },
-    "validacao_passou": false
+    "validacao_passou": true
   },
   "2026-03": {
     "pacote": "SINAPI-2026-03-formato-xlsx.zip",
@@ -30,7 +30,7 @@
       "analitico": 10265,
       "insumos": 4559
     },
-    "validacao_passou": false
+    "validacao_passou": true
   },
   "2026-04": {
     "pacote": "SINAPI-2026-04-formato-xlsx.zip",
@@ -41,7 +41,7 @@
       "analitico": 10359,
       "insumos": 4559
     },
-    "validacao_passou": false
+    "validacao_passou": true
   },
   "2026-05": {
     "pacote": "SINAPI-2026-05-formato-xlsx.zip",
@@ -52,7 +52,7 @@
       "analitico": 10394,
       "insumos": 4580
     },
-    "validacao_passou": false
+    "validacao_passou": true
   },
   "2026-06": {
     "pacote": "SINAPI-2026-06-formato-xlsx.zip",
@@ -63,7 +63,7 @@
       "analitico": 10435,
       "insumos": 4580
     },
-    "validacao_passou": false
+    "validacao_passou": true
   },
   "2026-07": {
     "pacote": "SINAPI-2026-07-formato-xlsx.zip",
@@ -74,7 +74,7 @@
       "analitico": 10525,
       "insumos": 4580
     },
-    "validacao_passou": false
+    "validacao_passou": true
   },
   "2026-08": {
     "pacote": "SINAPI-2026-08-formato-xlsx.zip",
@@ -85,7 +85,7 @@
       "analitico": 10528,
       "insumos": 4580
     },
-    "validacao_passou": false
+    "validacao_passou": true
   },
   "2026-09": {
     "pacote": "SINAPI-2026-09-formato-xlsx.zip",
@@ -96,6 +96,6 @@
       "analitico": 10580,
       "insumos": 4582
     },
-    "validacao_passou": false
+    "validacao_passou": true
   }
 }

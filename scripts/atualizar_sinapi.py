@@ -138,60 +138,154 @@ def main():
     from playwright.sync_api import sync_playwright
 
     estado = carregar_estado()
-    novidades, erros = [], []
+    anterior = json.loads(json.dumps(estado))  # cópia, para comparar com o mês anterior
+    novidades, erros = [], []  # erros: (periodo ou None, mensagem)
 
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        ctx = browser.new_context(user_agent=UA, locale="pt-BR")
-        page = ctx.new_page()
+    try:
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            ctx = browser.new_context(user_agent=UA, locale="pt-BR")
+            page = ctx.new_page()
 
-        pacotes = listar_pacotes(page)
-        print(f"Pacotes encontrados na Caixa: {len(pacotes)} (mais recente: {max(pacotes) if pacotes else '-'})")
-        if not pacotes:
-            raise SystemExit("Nenhum pacote encontrado — a página da Caixa pode ter mudado.")
+            pacotes = listar_pacotes(page)
+            print(f"Pacotes encontrados na Caixa: {len(pacotes)} (mais recente: {max(pacotes) if pacotes else '-'})")
+            if not pacotes:
+                raise RuntimeError("nenhum pacote encontrado na página da Caixa")
 
-        pendentes = [
-            per for per in sorted(pacotes)
-            if per >= PERIODO_MINIMO
-            and (per not in estado or pacotes[per]["retificacao"] > estado[per].get("retificacao", 0))
-        ][:MAX_POR_EXECUCAO]
-        print(f"Pendentes: {pendentes or 'nenhum'}")
+            pendentes = [
+                per for per in sorted(pacotes)
+                if per >= PERIODO_MINIMO
+                and (per not in estado or pacotes[per]["retificacao"] > estado[per].get("retificacao", 0))
+            ][:MAX_POR_EXECUCAO]
+            print(f"Pendentes: {pendentes or 'nenhum'}")
 
-        for per in pendentes:
-            info = pacotes[per]
-            print(f"\n== {per} ({info['pacote']})")
-            try:
-                contagens, validacao_ok = processar(ctx, per, info)
-                estado[per] = {
-                    "pacote": info["pacote"],
-                    "retificacao": info["retificacao"],
-                    "processado_em": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-                    "registros": contagens,
-                    "validacao_passou": validacao_ok,
-                }
-                salvar_estado(estado)
-                novidades.append((per, info, contagens, validacao_ok))
-                print(f"  ok: {contagens} | validação {'passou' if validacao_ok else 'com alertas'}")
-            except Exception as e:
-                erros.append(f"{per}: {e}")
-                print(f"  ERRO: {e}")
+            for per in pendentes:
+                info = pacotes[per]
+                print(f"\n== {per} ({info['pacote']})")
+                try:
+                    contagens, validacao_ok = processar(ctx, per, info)
+                    estado[per] = {
+                        "pacote": info["pacote"],
+                        "retificacao": info["retificacao"],
+                        "processado_em": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                        "registros": contagens,
+                        "validacao_passou": validacao_ok,
+                    }
+                    salvar_estado(estado)
+                    novidades.append((per, info, contagens, validacao_ok))
+                    print(f"  ok: {contagens} | validação {'passou' if validacao_ok else 'com alertas'}")
+                except Exception as e:
+                    erros.append((per, str(e)))
+                    print(f"  ERRO: {e}")
 
-        browser.close()
+            browser.close()
+    except Exception as e:
+        erros.append((None, str(e)))
+        print(f"ERRO GERAL: {e}")
 
     if novidades or erros:
-        linhas = ["## Atualização do SINAPI", ""]
-        for per, info, cont, ok in novidades:
-            ret = f" (Retificação {info['retificacao']:02d})" if info["retificacao"] else ""
-            linhas.append(f"- **{per}**{ret}: {cont['composicoes']} composições, {cont['insumos']} insumos — "
-                          f"validação {'✅ passou' if ok else '⚠️ com alertas (ver dados/logs)'}")
-        if erros:
-            linhas += ["", "### Erros", *[f"- {e}" for e in erros]]
-        linhas += ["", "Lembrete: atualizar os seletores de base no `quantify.html` (SP_DB / SP_DB_LABELS, "
-                   "3× `sp-db-select` e `orc-cfg-database`) e subir os JSONs para o servidor."]
-        (SAIDA / "novidades.md").write_text("\n".join(linhas), encoding="utf-8")
+        (SAIDA / "titulo.txt").write_text(titulo_aviso(novidades, erros), encoding="utf-8")
+        (SAIDA / "novidades.md").write_text(relatorio(novidades, erros, anterior), encoding="utf-8")
 
     if erros:
         sys.exit(1)
+
+
+# ─── Aviso por e-mail (issue no GitHub) ──────────────────────────────────────
+
+def titulo_aviso(novidades, erros):
+    pers = ", ".join(per for per, *_ in novidades)
+    if erros and not novidades:
+        return "❌ Robô do SINAPI falhou — veja o que fazer"
+    if erros:
+        return f"⚠️ SINAPI {pers} gerado, mas houve falhas em outros meses"
+    if not all(ok for *_, ok in novidades):
+        return f"⚠️ SINAPI {pers} gerado com alertas na validação"
+    return f"✅ Novo SINAPI {pers} — JSONs gerados e validados"
+
+
+def explicar_erro(msg):
+    """Traduz o erro técnico em causa provável + o que fazer."""
+    m = msg.lower()
+    if "nenhum pacote" in m:
+        return ("A página da Caixa abriu, mas a lista de relatórios mensais não apareceu. "
+                "Provavelmente a Caixa mudou o layout do site ou estava fora do ar.",
+                "Nada por enquanto: o robô tenta de novo amanhã. Se repetir por 3 dias seguidos, "
+                "peça ao Claude: \"o robô do SINAPI não acha os pacotes, ajuste o atualizar_sinapi.py\".")
+    if "timeout" in m or "net::" in m or "http 5" in m:
+        return ("O site da Caixa demorou demais ou ficou instável.",
+                "Nada: o robô tenta de novo amanhã automaticamente.")
+    if "download falhou" in m or "zip válido" in m:
+        return ("O link do pacote existe, mas o download não veio completo/correto (a Caixa pode ter bloqueado "
+                "ou o arquivo estava sendo substituído).",
+                "Nada por enquanto: o robô tenta de novo amanhã. Se repetir, peça ao Claude para investigar.")
+    if "referência não encontrada" in m:
+        return ("O zip baixou, mas não tinha a planilha SINAPI_Referência — a Caixa mudou o conteúdo do pacote.",
+                "Peça ao Claude: \"a Caixa mudou o zip do SINAPI, ajuste o robô\" (o nome dos arquivos está no erro).")
+    if "gerar_sinapi_json_v3" in m or "não gerado" in m or "suspeito" in m:
+        return ("A planilha foi baixada, mas a geração dos JSONs falhou ou saiu incompleta — "
+                "provavelmente a Caixa mudou colunas/abas da planilha.",
+                "Peça ao Claude: \"o gerador do SINAPI falhou no mês X, veja o log em dados/logs e ajuste o "
+                "gerar_sinapi_json_v3.py\". Os JSONs dos meses anteriores continuam válidos.")
+    return ("Erro inesperado.", "Peça ao Claude para olhar o log desta execução no GitHub Actions.")
+
+
+def mb(caminho):
+    return f"{caminho.stat().st_size / 1024 / 1024:.1f} MB" if caminho.exists() else "-"
+
+
+def relatorio(novidades, erros, anterior):
+    repo = os.environ.get("GITHUB_REPOSITORY", "engmiltonjose/miltonjose-sinapi")
+    run = os.environ.get("GITHUB_RUN_ID")
+    L = []
+
+    if novidades:
+        L += ["## ✅ O que deu certo", ""]
+        L += ["| Mês | Pacote da Caixa | Composições | Insumos | Validação |", "|---|---|---|---|---|"]
+        for per, info, cont, ok in novidades:
+            ret = f" — Retificação {info['retificacao']:02d}" if info["retificacao"] else ""
+            prev = [p for p in sorted(anterior) if p < per]
+            delta = ""
+            if prev and "registros" in anterior[prev[-1]]:
+                d = cont["composicoes"] - anterior[prev[-1]]["registros"]["composicoes"]
+                delta = f" ({d:+d} vs {prev[-1]})"
+            L.append(f"| **{per}**{ret} | `{info['pacote']}` | {cont['composicoes']}{delta} | {cont['insumos']} | "
+                     f"{'✅ passou' if ok else '⚠️ alertas'} |")
+
+        if any(info["retificacao"] for _, info, *_ in novidades):
+            L += ["", "> **Retificação:** a Caixa corrigiu um mês já publicado. Os JSONs desse mês foram "
+                  "**substituídos** pela versão corrigida — use os novos."]
+        if not all(ok for *_, ok in novidades):
+            L += ["", "> **Alertas na validação:** os JSONs foram gerados, mas o validador encontrou "
+                  "inconsistências. Veja `dados/logs/validacao-{mês}.txt` ou peça ao Claude para analisar "
+                  "antes de usar no Quantify."]
+
+        L += ["", "### Arquivos gerados", ""]
+        for per, *_ in novidades:
+            for k in ("composicoes", "analitico", "insumos"):
+                f = DADOS / f"sinapi-{k}-{per}.json"
+                L.append(f"- [`{f.name}`](https://github.com/{repo}/blob/main/dados/{f.name}) ({mb(f)})")
+
+        L += ["", "### O que você precisa fazer", "",
+              "1. **Trazer os JSONs para o seu PC** — peça ao Claude: *\"baixe os JSONs novos do SINAPI do GitHub\"*.",
+              "2. **Atualizar o Quantify** — peça ao Claude: *\"adicione o SINAPI "
+              f"{novidades[-1][0]} nos seletores do quantify.html\"*.",
+              "3. **Publicar** — subir por FTP os 3 JSONs de cada mês novo + o `quantify.html` "
+              "(o Claude te diz o caminho exato no servidor)."]
+
+    if erros:
+        L += ["", "## ❌ O que não deu certo", ""]
+        for per, msg in erros:
+            causa, acao = explicar_erro(msg)
+            L += [f"### {'Mês ' + per if per else 'Execução geral'}", "",
+                  f"- **Erro técnico:** `{msg}`",
+                  f"- **Causa provável:** {causa}",
+                  f"- **O que fazer:** {acao}", ""]
+        L += ["Os meses que já estavam prontos **não foram afetados**."]
+
+    if run:
+        L += ["", f"---", f"Log completo desta execução: https://github.com/{repo}/actions/runs/{run}"]
+    return "\n".join(L)
 
 
 if __name__ == "__main__":
