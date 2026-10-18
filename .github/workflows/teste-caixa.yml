@@ -1,0 +1,30 @@
+name: Teste de acesso à Caixa
+
+on:
+  workflow_dispatch:
+
+jobs:
+  teste:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependências
+        run: |
+          pip install requests playwright
+          python -m playwright install --with-deps chromium
+
+      - name: Rodar teste
+        run: python scripts/teste_caixa.py
+
+      - name: Guardar resultado
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: resultado-teste-caixa
+          path: saida/
