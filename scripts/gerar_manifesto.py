@@ -43,12 +43,17 @@ def main():
             "retificacao": info.get("retificacao", 0),
             "validacao_passou": info.get("validacao_passou"),
         })
+    caminho = DADOS / "manifesto.json"
+    anterior = json.loads(caminho.read_text(encoding="utf-8")) if caminho.exists() else {}
+    if anterior.get("bases") == bases:
+        print(f"manifesto sem mudanças ({len(bases)} bases)")
+        return
     manifesto = {
         "atualizado_em": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "mais_recente": bases[0]["data"] if bases else None,
         "bases": bases,
     }
-    (DADOS / "manifesto.json").write_text(json.dumps(manifesto, ensure_ascii=False, indent=2), encoding="utf-8")
+    caminho.write_text(json.dumps(manifesto, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"manifesto: {len(bases)} bases, mais recente {manifesto['mais_recente']}")
 
 
