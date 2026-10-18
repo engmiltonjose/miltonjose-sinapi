@@ -267,11 +267,10 @@ def relatorio(novidades, erros, anterior):
                 L.append(f"- [`{f.name}`](https://github.com/{repo}/blob/main/dados/{f.name}) ({mb(f)})")
 
         L += ["", "### O que você precisa fazer", "",
-              "1. **Trazer os JSONs para o seu PC** — peça ao Claude: *\"baixe os JSONs novos do SINAPI do GitHub\"*.",
-              "2. **Atualizar o Quantify** — peça ao Claude: *\"adicione o SINAPI "
-              f"{novidades[-1][0]} nos seletores do quantify.html\"*.",
-              "3. **Publicar** — subir por FTP os 3 JSONs de cada mês novo + o `quantify.html` "
-              "(o Claude te diz o caminho exato no servidor)."]
+              "- **No Quantify: nada.** A nova base aparece sozinha nos seletores em até ~5 minutos "
+              "(o Quantify lê a lista de bases deste repositório e baixa os JSONs pelo CDN).",
+              "- **Opcional:** se quiser os JSONs também no seu PC (para as skills Pilar ou uso offline), "
+              "peça ao Claude: *\"baixe os JSONs novos do SINAPI do GitHub\"*."]
 
     if erros:
         L += ["", "## ❌ O que não deu certo", ""]

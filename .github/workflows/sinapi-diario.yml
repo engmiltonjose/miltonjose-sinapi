@@ -46,6 +46,16 @@ jobs:
             git push
           fi
 
+      - name: Atualizar manifesto (lista de bases que o Quantify lê)
+        if: always()
+        run: |
+          python scripts/gerar_manifesto.py
+          git add dados/manifesto.json
+          if ! git diff --cached --quiet; then
+            git commit -m "SINAPI: manifesto atualizado $(date -u +%Y-%m-%d)"
+            git push
+          fi
+
       - name: Avisar por e-mail (issue no GitHub)
         if: always() && hashFiles('saida/novidades.md') != ''
         env:
