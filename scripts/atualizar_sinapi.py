@@ -254,7 +254,9 @@ def relatorio(novidades, erros, anterior):
 
         if any(info["retificacao"] for _, info, *_ in novidades):
             L += ["", "> **Retificação:** a Caixa corrigiu um mês já publicado. Os JSONs desse mês foram "
-                  "**substituídos** pela versão corrigida — use os novos."]
+                  "**substituídos** pela versão corrigida — use os novos. ⚠️ Se você já tinha subido esse mês para o "
+                  "Hostgator, **suba os JSONs corrigidos de novo (ou apague os antigos de lá)**: no modo híbrido o "
+                  "Quantify prefere o arquivo do servidor."]
         if not all(ok for *_, ok in novidades):
             L += ["", "> **Alertas na validação:** os JSONs foram gerados, mas o validador encontrou "
                   "inconsistências. Veja `dados/logs/validacao-{mês}.txt` ou peça ao Claude para analisar "

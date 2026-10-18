@@ -56,6 +56,26 @@ jobs:
             git push
           fi
 
+      - name: Aquecer o CDN (primeiro acesso no Quantify já rápido)
+        if: always() && hashFiles('saida/novidades.md') != ''
+        run: |
+          python - <<'EOF'
+          import json, datetime, urllib.request
+          hoje = datetime.datetime.now(datetime.timezone.utc).date().isoformat()
+          estado = json.load(open("dados/estado.json", encoding="utf-8"))
+          man = json.load(open("dados/manifesto.json", encoding="utf-8"))
+          for b in man["bases"]:
+              if not estado.get(b["data"], {}).get("processado_em", "").startswith(hoje):
+                  continue
+              for t in ("composicoes", "analitico", "insumos"):
+                  url = f"https://cdn.jsdelivr.net/gh/${{ github.repository }}@{b['commit']}/dados/sinapi-{t}-{b['data']}.json"
+                  try:
+                      req = urllib.request.Request(url, headers={"Accept-Encoding": "gzip, br"})
+                      print(url, urllib.request.urlopen(req, timeout=120).status)
+                  except Exception as e:
+                      print(url, "falhou:", e)
+          EOF
+
       - name: Avisar por e-mail (issue no GitHub)
         if: always() && hashFiles('saida/novidades.md') != ''
         env:
