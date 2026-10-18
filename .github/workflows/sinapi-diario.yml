@@ -1,0 +1,53 @@
+name: SINAPI diário
+
+on:
+  schedule:
+    - cron: "0 11 * * *"   # todo dia às 08:00 (horário de Brasília)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: sinapi-diario
+  cancel-in-progress: false
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Instalar dependências
+        run: |
+          pip install openpyxl pandas playwright
+          python -m playwright install --with-deps chromium
+
+      - name: Verificar e processar SINAPI novo
+        id: robo
+        run: python scripts/atualizar_sinapi.py
+
+      - name: Salvar JSONs no repositório
+        if: always()
+        run: |
+          git config user.name "robo-sinapi"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add dados/
+          if git diff --cached --quiet; then
+            echo "Nada novo para salvar."
+          else
+            git commit -m "SINAPI: atualização automática $(date -u +%Y-%m-%d)"
+            git push
+          fi
+
+      - name: Avisar por e-mail (issue no GitHub)
+        if: always() && hashFiles('saida/novidades.md') != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh issue create --title "SINAPI atualizado — $(date -u +%Y-%m-%d)" --body-file saida/novidades.md
