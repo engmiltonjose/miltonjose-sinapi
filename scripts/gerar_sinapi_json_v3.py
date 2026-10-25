@@ -25,12 +25,14 @@ def extract_code(v):
         iv = int(v)
         return str(iv) if iv != 0 else None
     if isinstance(v, str):
-        m = re.search(r',\s*(\d{4,7})\s*\)', v)  # captura número 4-7 dígitos no HYPERLINK
+        m = re.search(r',\s*(\d{1,7})\s*\)\s*$', v)  # código = último argumento do HYPERLINK(...)
         if m:
             return m.group(1)
         v = v.strip()
-        if re.fullmatch(r'\d{4,7}', v):
-            return v
+        # códigos de 1 a 3 dígitos existem (ex.: 370 = areia média) — antes eram descartados
+        m = re.fullmatch(r'0*(\d{1,7})(?:\.0+)?', v)
+        if m and int(m.group(1)) != 0:
+            return m.group(1)
     return None
 
 def to_float(v):

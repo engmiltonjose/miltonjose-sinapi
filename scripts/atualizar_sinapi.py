@@ -125,12 +125,34 @@ def processar(ctx, periodo, info):
         if contagens[k] < 1000:
             raise RuntimeError(f"{f.name} tem só {contagens[k]} registros — suspeito")
 
+    # Consistência: o analítico (coef × preço dos itens) deve fechar com o custo da composição (SD/SP, ±2%)
+    comps = {c["codigo"]: c for c in json.loads(arquivos["composicoes"].read_text(encoding="utf-8"))}
+    ana = json.loads(arquivos["analitico"].read_text(encoding="utf-8"))
+    ins = json.loads(arquivos["insumos"].read_text(encoding="utf-8"))
+    fecha = nao_fecha = 0
+    for cod, comp in comps.items():
+        custo = comp["custos"]["SD"].get("SP") or 0
+        if not custo or cod not in ana:
+            continue
+        soma = 0
+        for it in ana[cod]:
+            if it["tipo"].startswith("COMPOSI"):
+                pu = comps.get(it["codigo"], {}).get("custos", {}).get("SD", {}).get("SP")
+            else:
+                pu = ins.get(it["codigo"], {}).get("precos", {}).get("SD", {}).get("SP")
+            soma += it["coef"] * (pu or 0)
+        if abs(soma - custo) / custo <= 0.02:
+            fecha += 1
+        else:
+            nao_fecha += 1
+    contagens["analitico_nao_fecha_pct"] = round(100 * nao_fecha / max(1, fecha + nao_fecha), 1)
+
     v = subprocess.run([sys.executable, str(SCRIPTS / "validar-sinapi-analitico.py"),
                         str(arquivos["analitico"]), str(arquivos["composicoes"])],
                        capture_output=True, text=True, encoding="utf-8", errors="replace")
     log_val = v.stdout + v.stderr
     (LOGS / f"validacao-{periodo}.txt").write_text(log_val, encoding="utf-8")
-    validacao_ok = "PASSOU" in log_val
+    validacao_ok = "PASSOU" in log_val and contagens["analitico_nao_fecha_pct"] <= 5
     return contagens, validacao_ok
 
 
@@ -152,11 +174,15 @@ def main():
             if not pacotes:
                 raise RuntimeError("nenhum pacote encontrado na página da Caixa")
 
+            reprocessar = os.environ.get("REPROCESSAR", "").lower() in ("1", "true", "sim")
             pendentes = [
                 per for per in sorted(pacotes)
                 if per >= PERIODO_MINIMO
-                and (per not in estado or pacotes[per]["retificacao"] > estado[per].get("retificacao", 0))
+                and (reprocessar or per not in estado
+                     or pacotes[per]["retificacao"] > estado[per].get("retificacao", 0))
             ][:MAX_POR_EXECUCAO]
+            if reprocessar:
+                print("REPROCESSAR ativo: regerando todos os meses a partir de", PERIODO_MINIMO)
             print(f"Pendentes: {pendentes or 'nenhum'}")
 
             for per in pendentes:
@@ -241,7 +267,8 @@ def relatorio(novidades, erros, anterior):
 
     if novidades:
         L += ["## ✅ O que deu certo", ""]
-        L += ["| Mês | Pacote da Caixa | Composições | Insumos | Validação |", "|---|---|---|---|---|"]
+        L += ["| Mês | Pacote da Caixa | Composições | Insumos | Analítico não fecha | Validação |",
+              "|---|---|---|---|---|---|"]
         for per, info, cont, ok in novidades:
             ret = f" — Retificação {info['retificacao']:02d}" if info["retificacao"] else ""
             prev = [p for p in sorted(anterior) if p < per]
@@ -250,7 +277,7 @@ def relatorio(novidades, erros, anterior):
                 d = cont["composicoes"] - anterior[prev[-1]]["registros"]["composicoes"]
                 delta = f" ({d:+d} vs {prev[-1]})"
             L.append(f"| **{per}**{ret} | `{info['pacote']}` | {cont['composicoes']}{delta} | {cont['insumos']} | "
-                     f"{'✅ passou' if ok else '⚠️ alertas'} |")
+                     f"{cont.get('analitico_nao_fecha_pct', '-')}% | {'✅ passou' if ok else '⚠️ alertas'} |")
 
         if any(info["retificacao"] for _, info, *_ in novidades):
             L += ["", "> **Retificação:** a Caixa corrigiu um mês já publicado. Os JSONs desse mês foram "

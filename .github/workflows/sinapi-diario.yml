@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: "0 11 * * *"   # todo dia às 08:00 (horário de Brasília)
   workflow_dispatch:
+    inputs:
+      reprocessar:
+        description: "Regerar todos os meses (use após corrigir o gerador)"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -33,6 +38,8 @@ jobs:
 
       - name: Verificar e processar SINAPI novo
         id: robo
+        env:
+          REPROCESSAR: ${{ inputs.reprocessar }}
         run: python scripts/atualizar_sinapi.py
 
       - name: Salvar JSONs no repositório
