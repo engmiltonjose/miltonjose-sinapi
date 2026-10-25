@@ -19,8 +19,8 @@ DADOS = RAIZ / "dados"
 TIPOS = ("composicoes", "analitico", "insumos")
 
 
-def ultimo_commit(caminho):
-    r = subprocess.run(["git", "log", "-1", "--format=%H", "--", str(caminho)],
+def ultimo_commit_de(*caminhos):
+    r = subprocess.run(["git", "log", "-1", "--format=%H", "--", *map(str, caminhos)],
                        cwd=RAIZ, capture_output=True, text=True, check=True)
     return r.stdout.strip()
 
@@ -32,13 +32,14 @@ def main():
         arquivos = [DADOS / f"sinapi-{t}-{per}.json" for t in TIPOS]
         if not all(a.exists() for a in arquivos):
             continue
-        commits = {ultimo_commit(a.relative_to(RAIZ)) for a in arquivos}
-        if len(commits) != 1 or "" in commits:
-            raise SystemExit(f"{per}: os 3 JSONs precisam estar commitados juntos (commits: {commits})")
+        # commit mais recente que tocou qualquer um dos 3 JSONs: nele os três estão na versão atual
+        commit = ultimo_commit_de(*[a.relative_to(RAIZ) for a in arquivos])
+        if not commit:
+            raise SystemExit(f"{per}: JSONs ainda não commitados")
         info = estado[per]
         bases.append({
             "data": per,
-            "commit": commits.pop(),
+            "commit": commit,
             "pacote": info.get("pacote", ""),
             "retificacao": info.get("retificacao", 0),
             "validacao_passou": info.get("validacao_passou"),

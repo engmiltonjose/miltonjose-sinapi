@@ -1,66 +1,66 @@
 {
-  "atualizado_em": "2026-10-18T16:41:26+00:00",
+  "atualizado_em": "2026-10-25T22:21:21+00:00",
   "mais_recente": "2026-09",
   "bases": [
     {
       "data": "2026-09",
-      "commit": "4962dcf5b5451371f8b16a895c4e03a728afd69e",
+      "commit": "f8a3eb669c6f1fbd1df45513056d276279ee49c8",
       "pacote": "SINAPI-2026-09-formato-xlsx.zip",
       "retificacao": 0,
       "validacao_passou": true
     },
     {
       "data": "2026-08",
-      "commit": "4962dcf5b5451371f8b16a895c4e03a728afd69e",
+      "commit": "f8a3eb669c6f1fbd1df45513056d276279ee49c8",
       "pacote": "SINAPI-2026-08-formato-xlsx.zip",
       "retificacao": 0,
       "validacao_passou": true
     },
     {
       "data": "2026-07",
-      "commit": "4962dcf5b5451371f8b16a895c4e03a728afd69e",
+      "commit": "f8a3eb669c6f1fbd1df45513056d276279ee49c8",
       "pacote": "SINAPI-2026-07-formato-xlsx.zip",
       "retificacao": 0,
       "validacao_passou": true
     },
     {
       "data": "2026-06",
-      "commit": "4962dcf5b5451371f8b16a895c4e03a728afd69e",
+      "commit": "f8a3eb669c6f1fbd1df45513056d276279ee49c8",
       "pacote": "SINAPI-2026-06-formato-xlsx.zip",
       "retificacao": 0,
       "validacao_passou": true
     },
     {
       "data": "2026-05",
-      "commit": "4962dcf5b5451371f8b16a895c4e03a728afd69e",
+      "commit": "f8a3eb669c6f1fbd1df45513056d276279ee49c8",
       "pacote": "SINAPI-2026-05-formato-xlsx.zip",
       "retificacao": 0,
       "validacao_passou": true
     },
     {
       "data": "2026-04",
-      "commit": "4962dcf5b5451371f8b16a895c4e03a728afd69e",
+      "commit": "f8a3eb669c6f1fbd1df45513056d276279ee49c8",
       "pacote": "SINAPI-2026-04-formato-xlsx.zip",
       "retificacao": 0,
       "validacao_passou": true
     },
     {
       "data": "2026-03",
-      "commit": "4962dcf5b5451371f8b16a895c4e03a728afd69e",
+      "commit": "f8a3eb669c6f1fbd1df45513056d276279ee49c8",
       "pacote": "SINAPI-2026-03-formato-xlsx.zip",
       "retificacao": 0,
       "validacao_passou": true
     },
     {
       "data": "2026-02",
-      "commit": "4962dcf5b5451371f8b16a895c4e03a728afd69e",
+      "commit": "f8a3eb669c6f1fbd1df45513056d276279ee49c8",
       "pacote": "SINAPI-2026-02-formato-xlsx_Retificacao01.zip",
       "retificacao": 1,
       "validacao_passou": true
     },
     {
       "data": "2026-01",
-      "commit": "4962dcf5b5451371f8b16a895c4e03a728afd69e",
+      "commit": "f8a3eb669c6f1fbd1df45513056d276279ee49c8",
       "pacote": "SINAPI-2026-01-formato-xlsx_Retificacao01.zip",
       "retificacao": 1,
       "validacao_passou": true
