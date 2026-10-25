@@ -4,26 +4,27 @@ VALIDAO DO SINAPI ANALTICO
 
 RESUMO ESTATSTICO:
 --------------------------------------------------------------------------------
-Total de composies: 10265
-   Com itens: 10265
+Total de composies: 10284
+   Com itens: 10284
    Sem itens: 0
 
 Composies por tipo de item:
-   Com INSUMOS: 10265
+   Com INSUMOS: 10284
    SEM insumos: 0
-   S com composies (sem insumos): 2198
+   S com composies (sem insumos): 2079
 
-Total de itens: 52960
-   INSUMOS: 19478
+Total de itens: 54525
+   INSUMOS: 21043
    COMPOSIES: 33482
 
  VERIFICAO - Composio 87275:
 --------------------------------------------------------------------------------
-Itens encontrados: 4
+Itens encontrados: 5
   1. COMPOSIÇÃO   | 88316  | SERVENTE COM ENCARGOS COMPLEMENTARES
   2. COMPOSIÇÃO   | 88256  | AZULEJISTA OU LADRILHEIRO COM ENCARGOS COMPLEMENTARES
   3. INSUMO       | 34357  | REJUNTE CIMENTICIO, QUALQUER COR
   4. INSUMO       | 1381   | ARGAMASSA COLANTE AC I PARA CERAMICAS
+  5. INSUMO       | 536    | REVESTIMENTO PARA PAREDE, EM CERAMICA ESMALTADA, FORMATO MEN
    FALTA: Placa cermica no encontrada!
 
 ================================================================================

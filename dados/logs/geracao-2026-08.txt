@@ -9,20 +9,20 @@ sinapi-composicoes.json: 10547 composicoes, 11883 KB
 
 Lendo Analitico...
   Linhas com itens: 56281
-sinapi-analitico.json: 10528 composicoes, 10767 KB
-  Composicoes com analitico: 10528/10547
+sinapi-analitico.json: 10547 composicoes, 11018 KB
+  Composicoes com analitico: 10547/10547
 
 Lendo ISD...
-  ISD: 4580 insumos
+  ISD: 4876 insumos
 Lendo ICD...
 Lendo ISE...
-sinapi-insumos.json: 4580 insumos, 4654 KB
+sinapi-insumos.json: 4876 insumos, 4950 KB
 
 === VALIDACAO ===
 composicoes :  10547  | 11883 KB
-analitico   :  10528  | 10767 KB
-insumos     :   4580  | 4654 KB
-TOTAL                 | 27304 KB
+analitico   :  10547  | 11018 KB
+insumos     :   4876  | 4950 KB
+TOTAL                 | 27851 KB
   87262: composicoes=True, analitico=True
     SP/SD=123.0  grupo=Revestimentos Cerâmicos Internos
     Itens: 5  | Ex: {'tipo': 'COMPOSIÇÃO', 'codigo': '88316', 'descricao': 'SERVENTE COM ENCARGOS COMPLEMENTARES', 'unidade': 'H', 'coef': 0.2064, 'situacao': 'COM CUSTO'}
@@ -32,3 +32,11 @@ TOTAL                 | 27304 KB
     Itens: 1  | Ex: {'tipo': 'COMPOSIÇÃO', 'codigo': '88316', 'descricao': 'SERVENTE COM ENCARGOS COMPLEMENTARES', 'unidade': 'H', 'coef': 3.955767, 'situacao': 'COM CUSTO'}
 
 Concluido.
+/home/runner/work/miltonjose-sinapi/miltonjose-sinapi/scripts/gerar_sinapi_json_v3.py:118: Pandas4Warning: ExcelFile.parse is deprecated. Use pd.read_excel instead.
+  df_ana = xl.parse("Analítico", header=9, dtype=str)
+/home/runner/work/miltonjose-sinapi/miltonjose-sinapi/scripts/gerar_sinapi_json_v3.py:158: Pandas4Warning: ExcelFile.parse is deprecated. Use pd.read_excel instead.
+  df = xl.parse(sheet_name, header=9, dtype=str)
+/home/runner/work/miltonjose-sinapi/miltonjose-sinapi/scripts/gerar_sinapi_json_v3.py:158: Pandas4Warning: ExcelFile.parse is deprecated. Use pd.read_excel instead.
+  df = xl.parse(sheet_name, header=9, dtype=str)
+/home/runner/work/miltonjose-sinapi/miltonjose-sinapi/scripts/gerar_sinapi_json_v3.py:158: Pandas4Warning: ExcelFile.parse is deprecated. Use pd.read_excel instead.
+  df = xl.parse(sheet_name, header=9, dtype=str)
