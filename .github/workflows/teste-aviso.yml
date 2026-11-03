@@ -1,0 +1,23 @@
+name: Teste do aviso por e-mail
+
+# Rodar manualmente (aba Actions → "Teste do aviso por e-mail" → Run workflow)
+# para conferir se o e-mail do robô está chegando. A issue é aberta pelo robô
+# (não pelo Milton), porque o GitHub não avisa ninguém sobre ações da própria pessoa.
+on:
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  avisar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Abrir issue de teste atribuída ao dono do repositório
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh issue create --assignee "${{ github.repository_owner }}" \
+            --title "🧪 Teste do aviso do robô do SINAPI" \
+            --body "Se este aviso chegou no seu e-mail, as notificações do robô estão funcionando. Pode fechar esta issue."
