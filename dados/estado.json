@@ -106,5 +106,17 @@
       "analitico_nao_fecha_pct": 1.8
     },
     "validacao_passou": true
+  },
+  "2026-10": {
+    "pacote": "SINAPI-2026-10-formato-xlsx.zip",
+    "retificacao": 0,
+    "processado_em": "2026-11-13T11:50:39+00:00",
+    "registros": {
+      "composicoes": 10710,
+      "analitico": 10710,
+      "insumos": 5038,
+      "analitico_nao_fecha_pct": 1.8
+    },
+    "validacao_passou": true
   }
 }

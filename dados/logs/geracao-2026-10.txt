@@ -1,0 +1,42 @@
+Abrindo planilha (sem read_only — aguarde)...
+Planilha carregada.
+Lendo CSD...
+  CSD: 10710 composicoes
+  Exemplo: 104658 → PISO PODOTÁTIL DE ALERTA OU DIRECIONAL, DE CONCRETO, ASSENTA
+Lendo CCD...
+Lendo CSE...
+sinapi-composicoes.json: 10710 composicoes, 12061 KB
+
+Lendo Analitico...
+  Linhas com itens: 57096
+sinapi-analitico.json: 10710 composicoes, 11186 KB
+  Composicoes com analitico: 10710/10710
+
+Lendo ISD...
+  ISD: 5038 insumos
+Lendo ICD...
+Lendo ISE...
+sinapi-insumos.json: 5038 insumos, 5133 KB
+
+=== VALIDACAO ===
+composicoes :  10710  | 12061 KB
+analitico   :  10710  | 11186 KB
+insumos     :   5038  | 5133 KB
+TOTAL                 | 28380 KB
+  87262: composicoes=True, analitico=True
+    SP/SD=118.85  grupo=Revestimentos Cerâmicos Internos
+    Itens: 5  | Ex: {'tipo': 'COMPOSIÇÃO', 'codigo': '88316', 'descricao': 'SERVENTE COM ENCARGOS COMPLEMENTARES', 'unidade': 'H', 'coef': 0.2064, 'situacao': 'COM CUSTO'}
+  74209: composicoes=False, analitico=False
+  93358: composicoes=True, analitico=True
+    SP/SD=127.29  grupo=Escavação de Valas
+    Itens: 1  | Ex: {'tipo': 'COMPOSIÇÃO', 'codigo': '88316', 'descricao': 'SERVENTE COM ENCARGOS COMPLEMENTARES', 'unidade': 'H', 'coef': 3.955767, 'situacao': 'COM CUSTO'}
+
+Concluido.
+/home/runner/work/miltonjose-sinapi/miltonjose-sinapi/scripts/gerar_sinapi_json_v3.py:118: Pandas4Warning: ExcelFile.parse is deprecated. Use pd.read_excel instead.
+  df_ana = xl.parse("Analítico", header=9, dtype=str)
+/home/runner/work/miltonjose-sinapi/miltonjose-sinapi/scripts/gerar_sinapi_json_v3.py:158: Pandas4Warning: ExcelFile.parse is deprecated. Use pd.read_excel instead.
+  df = xl.parse(sheet_name, header=9, dtype=str)
+/home/runner/work/miltonjose-sinapi/miltonjose-sinapi/scripts/gerar_sinapi_json_v3.py:158: Pandas4Warning: ExcelFile.parse is deprecated. Use pd.read_excel instead.
+  df = xl.parse(sheet_name, header=9, dtype=str)
+/home/runner/work/miltonjose-sinapi/miltonjose-sinapi/scripts/gerar_sinapi_json_v3.py:158: Pandas4Warning: ExcelFile.parse is deprecated. Use pd.read_excel instead.
+  df = xl.parse(sheet_name, header=9, dtype=str)
