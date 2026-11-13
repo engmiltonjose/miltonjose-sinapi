@@ -1,7 +1,14 @@
 {
-  "atualizado_em": "2026-10-25T22:21:21+00:00",
-  "mais_recente": "2026-09",
+  "atualizado_em": "2026-11-13T11:50:42+00:00",
+  "mais_recente": "2026-10",
   "bases": [
+    {
+      "data": "2026-10",
+      "commit": "ec569ab84fae052496796b873cc9dc9f3fdbe586",
+      "pacote": "SINAPI-2026-10-formato-xlsx.zip",
+      "retificacao": 0,
+      "validacao_passou": true
+    },
     {
       "data": "2026-09",
       "commit": "f8a3eb669c6f1fbd1df45513056d276279ee49c8",
